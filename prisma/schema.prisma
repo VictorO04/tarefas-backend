@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model status {
+  id      Int       @id @default(autoincrement())
+  status  String?   @db.VarChar(7)
+  tarefas tarefas[]
+}
+
+model tarefas {
+  id              Int       @id @default(autoincrement())
+  tarefa          String    @db.VarChar(100)
+  descricaotarefa String?   @db.VarChar(300)
+  id_status       Int?
+  criadoem        DateTime? @default(now()) @db.Date
+  status          status?   @relation(fields: [id_status], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tarefas_status")
+}
